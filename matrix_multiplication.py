@@ -14,21 +14,14 @@ Matrix = List[Vector]
 def matrix_dims(a: Matrix) -> Tuple[int, int]:
     return (len(a), len(a[0]))
 
-def empty_matrix(*, rows: int, cols: int) -> Matrix:
-    return [[0] * cols for i in range(rows)]
-
 def seq_matrix_multiply(a: Matrix, b: Matrix) -> Matrix:
     rows_a, cols_a = matrix_dims(a)
     rows_b, cols_b = matrix_dims(b)
     if cols_a != rows_b:
         raise ArithmeticError("Cannot multiply {}x{} with {}x{} matrix".format(rows_a, cols_a, rows_b, cols_b))
 
-    c = empty_matrix(rows=rows_a, cols=cols_b)
-    for i in range(rows_a):
-        for j in range(cols_b):
-            for k in range(cols_a):
-                c[i][j] += a[i][k] * b[k][j]
-    return c
+    b_T = matrix_transpose(b)
+    return [ multiple_row(a_row, b_T) for i, a_row in enumerate(a) ]
 
 def matrix_transpose(a: Matrix) -> Matrix:
     rows, cols = matrix_dims(a)
@@ -72,9 +65,9 @@ def time_it(name, NUMBER_OF_RUNS, fn, *args) -> float:
     return total_time
 
 if __name__ == '__main__':
-    NUMBER_OF_RUNS = 5
+    NUMBER_OF_RUNS = 3
     PROCESS_COUNT = mp.cpu_count()
-    MATRIX_SIZE = 250
+    MATRIX_SIZE = 500
     print('Measuring matrix multiplication speedup with {}x{} matrices using {} processes.'.format(MATRIX_SIZE, MATRIX_SIZE, PROCESS_COUNT))
     a = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]
     b = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]

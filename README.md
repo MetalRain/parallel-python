@@ -13,4 +13,7 @@ Run with `python matrix_multiplication.py`
 
 I created process pool that processes one row of output matrix in one task. I precalculated transpose for second matrix so that each element of output was just dot product.
 
-When I ran this program in my machine (VM) with 4 cores I got speedup of 3.9 to 4.8 Since speedup is bigger than number of cores, there must be some changes in parallel version could benefit the sequential version as well.
+Output from my machine:
+```
+
+```
