@@ -32,11 +32,7 @@ def seq_matrix_multiply(a: Matrix, b: Matrix) -> Matrix:
 
 def matrix_transpose(a: Matrix) -> Matrix:
     rows, cols = matrix_dims(a)
-    b = empty_matrix(rows=cols, cols=rows)
-    for i in range(rows):
-        for j in range(cols):
-            b[j][i] = a[i][j]
-    return b
+    return [ [ a[i][j] for i in range(rows) ] for j in range(cols) ]
 
 def dot_product(a: Vector, b: Vector) -> float:
     return sum(i * j for i,j in zip(a, b))
