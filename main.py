@@ -46,7 +46,7 @@ def matrix_transpose(a: Matrix) -> Matrix:
 def dot_product(a: Vector, b: Vector) -> float:
     return sum(i * j for i,j in zip(a, b))
 
-def multiple_row(a_row: Vector, b_rows: Matrix) -> Future:
+def multiple_row(a_row: Vector, b_rows: Matrix) -> Vector:
     return [ dot_product(a_row, b_row) for b_row in b_rows ]
 
 def par_matrix_multiply_rows(num_processes: int, a: Matrix, b: Matrix) -> Matrix:
@@ -59,17 +59,17 @@ def par_matrix_multiply_rows(num_processes: int, a: Matrix, b: Matrix) -> Matrix
     b_T = matrix_transpose(b)
     with ProcessPoolExecutor(max_workers=num_processes) as pool:
         # Fork
-        c = [ pool.submit(multiple_row, a_row, b_T) for i, a_row in enumerate(a) ]
+        row_futures: List[Future] = [ pool.submit(multiple_row, a_row, b_T) for i, a_row in enumerate(a) ]
         # Join
-        c = [ row.result() for row in c ]
+        result: Matrix = [ row.result() for row in row_futures ]
 
-    return c
+    return result
 
-def time_it(name, NUMBER_OF_RUNS, fn, *args) -> int:
+def time_it(name, NUMBER_OF_RUNS, fn, *args) -> float:
     print('Running', name, 'for', NUMBER_OF_RUNS, 'times')
     # Warmup
     _ = fn(*args)
-    total_time = 0
+    total_time = 0.0
     # Timed runs
     for _ in range(NUMBER_OF_RUNS):
         start = time.perf_counter()
