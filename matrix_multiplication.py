@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-'''
-Matrix multiplication challenge from course
-Parallel and Concurrent Programming with Python 2
-https://www.linkedin.com/learning/parallel-and-concurrent-programming-with-python-2
-'''
 
 import random
 import time
@@ -11,7 +6,7 @@ import math
 import multiprocessing as mp
 from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 
-from typing import Any, List, Tuple
+from typing import Any, List, Optional, Tuple
 
 Vector = List[float]
 Matrix = List[Vector]
@@ -49,7 +44,7 @@ def dot_product(a: Vector, b: Vector) -> float:
 def multiple_row(a_row: Vector, b_rows: Matrix) -> Vector:
     return [ dot_product(a_row, b_row) for b_row in b_rows ]
 
-def par_matrix_multiply_rows(num_processes: int, a: Matrix, b: Matrix) -> Matrix:
+def par_matrix_multiply(a: Matrix, b: Matrix, num_processes: Optional[int] = None) -> Matrix:
     rows_a, cols_a = matrix_dims(a)
     rows_b, cols_b = matrix_dims(b)
     if cols_a != rows_b:
@@ -89,7 +84,7 @@ if __name__ == '__main__':
     b = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]
 
     seq_time = time_it("Sequential", NUMBER_OF_RUNS, seq_matrix_multiply, a, b)
-    par_time = time_it("Parallel (rows)", NUMBER_OF_RUNS, par_matrix_multiply_rows, PROCESS_COUNT, a, b)
+    par_time = time_it("Parallel", NUMBER_OF_RUNS, par_matrix_multiply, a, b, PROCESS_COUNT)
 
     time_saved = seq_time - par_time
     speedup = seq_time / par_time
