@@ -73,7 +73,7 @@ def time_it(name, NUMBER_OF_RUNS, fn, *args) -> float:
 
 if __name__ == '__main__':
     NUMBER_OF_RUNS = 2
-    PROCESS_COUNT = 2
+    PROCESS_COUNT = mp.cpu_count()
     MATRIX_SIZE = 300
     print('Measuring matrix multiplication speedup with {}x{} matrices using {} processes.'.format(MATRIX_SIZE, MATRIX_SIZE, PROCESS_COUNT))
     a = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]
