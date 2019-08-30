@@ -8,14 +8,14 @@ from concurrent.futures import Future, ProcessPoolExecutor, as_completed
 
 from typing import Any, List, Optional, Tuple
 
-Vector = List[float]
+Vector = List[int]
 Matrix = List[Vector]
 
 def matrix_dims(a: Matrix) -> Tuple[int, int]:
     return (len(a), len(a[0]))
 
 def empty_matrix(*, rows: int, cols: int) -> Matrix:
-    return [[0.0] * cols for i in range(rows)]
+    return [[0] * cols for i in range(rows)]
 
 def seq_matrix_multiply(a: Matrix, b: Matrix) -> Matrix:
     rows_a, cols_a = matrix_dims(a)
@@ -34,7 +34,7 @@ def matrix_transpose(a: Matrix) -> Matrix:
     rows, cols = matrix_dims(a)
     return [ [ a[i][j] for i in range(rows) ] for j in range(cols) ]
 
-def dot_product(a: Vector, b: Vector) -> float:
+def dot_product(a: Vector, b: Vector) -> int:
     return sum(i * j for i,j in zip(a, b))
 
 def multiple_row(a_row: Vector, b_rows: Matrix) -> Vector:
@@ -72,9 +72,9 @@ def time_it(name, NUMBER_OF_RUNS, fn, *args) -> float:
     return total_time
 
 if __name__ == '__main__':
-    NUMBER_OF_RUNS = 2
+    NUMBER_OF_RUNS = 5
     PROCESS_COUNT = mp.cpu_count()
-    MATRIX_SIZE = 300
+    MATRIX_SIZE = 250
     print('Measuring matrix multiplication speedup with {}x{} matrices using {} processes.'.format(MATRIX_SIZE, MATRIX_SIZE, PROCESS_COUNT))
     a = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]
     b = [[random.random() for i in range(MATRIX_SIZE)] for j in range(MATRIX_SIZE)]
